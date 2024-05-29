@@ -1,8 +1,23 @@
+import { useState } from 'react';
 import { BellIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import MyTasks from '../components/tasks/MyTasks';
 import TaskCard from '../components/tasks/TaskCard';
+import ModalDetails from '../components/Ui/ModalDetails';
+import { useSelector } from 'react-redux';
 
 const Tasks = () => {
+
+  const Tasks = useSelector((state) => state.TaskSlice.task);
+  console.log(Tasks);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+
+
+
   return (
     <div className="h-screen grid grid-cols-12">
       <div className="col-span-9 px-10 pt-10">
@@ -11,13 +26,25 @@ const Tasks = () => {
             <h1 className="font-semibold text-3xl">Tasks</h1>
           </div>
           <div className="flex gap-5">
-            <button className="border-2 border-secondary/20 hover:border-primary hover:bg-primary rounded-xl h-10 w-10  grid place-content-center text-secondary hover:text-white transition-all">
+            <button className="border-2 border-secondary/20 hover:border-primary hover:bg-primary rounded-xl h-10 w-10 grid place-content-center text-secondary hover:text-white transition-all">
               <MagnifyingGlassIcon className="h-6 w-6" />
             </button>
             <button className="border-2 border-secondary/20 hover:border-primary hover:bg-primary rounded-xl h-10 w-10 grid place-content-center text-secondary hover:text-white transition-all">
               <BellIcon className="h-6 w-6" />
             </button>
-            <button className="btn btn-primary">Add Task</button>
+            <button onClick={openModal} className="btn btn-primary">Add Task</button>
+            {isModalOpen && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ">
+                <div className="relative bg-pink-50 rounded-lg shadow-lg p-8 max-w-5xl">
+                  <dialog open className="modal">
+                    <div className="modal-box">
+                      <ModalDetails closeModal={closeModal} />
+                    </div>
+                  </dialog>
+                </div>
+              </div>
+
+            )}
             <div className="h-10 w-10 rounded-xl overflow-hidden">
               <img
                 src="https://images.unsplash.com/photo-1528892952291-009c663ce843?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=644&q=80"
@@ -36,7 +63,9 @@ const Tasks = () => {
               </p>
             </div>
             <div className="space-y-3">
-              <TaskCard />
+              {
+                Tasks.map(item => <TaskCard task={item} key={item.id} />)
+              }
             </div>
           </div>
           <div className="relative h-[800px] overflow-auto">
@@ -47,19 +76,22 @@ const Tasks = () => {
               </p>
             </div>
             <div className="space-y-3">
-              <TaskCard />
-              <TaskCard />
+              {
+                Tasks.map(item => <TaskCard task={item} key={item.id} />)
+              }
             </div>
           </div>
           <div className="relative h-[800px] overflow-auto">
             <div className="flex sticky top-0 justify-between bg-[#D3DDF9] p-5 rounded-md mb-3">
-              <h1>Up Next</h1>
+              <h1>Completed</h1>
               <p className="bg-primary text-white w-6 h-6 grid place-content-center rounded-md">
                 0
               </p>
             </div>
             <div className="space-y-3">
-              <TaskCard />
+              {
+                Tasks.map(item => <TaskCard task={item} key={item.id} />)
+              }
             </div>
           </div>
         </div>
