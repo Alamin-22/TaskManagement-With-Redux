@@ -1,11 +1,15 @@
 import { useForm } from "react-hook-form"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addTask } from "../../redux/features/task/taskSlice";
 
-const TaskDetailsModal = ({ closeModal }) => {
+const TaskDetailsModal = ({ id, closeModal }) => {
 
     const { register, handleSubmit } = useForm();
     const dispatch = useDispatch();
+    const { task } = useSelector((state) => state.TaskSlice);
+
+    const selectedTask = task.find((item) => item.id === id);
+    console.log(selectedTask);
 
     const onSubmit = (data) => {
         dispatch(addTask(data));
@@ -18,7 +22,7 @@ const TaskDetailsModal = ({ closeModal }) => {
             <form onSubmit={handleSubmit(onSubmit)} >
                 <label className="form-control w-full ">
                     <div className="label">
-                        <span className="label-text font-medium">What Is Your Task Title?</span>
+                        <span className="label-text font-medium">What Is Your Task Title? {id}</span>
                     </div>
                     <input type="text"  {...register("title")} placeholder="Type here Your Task Name" className="input input-bordered w-full bg-white " />
                 </label>
