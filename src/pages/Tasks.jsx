@@ -2,19 +2,21 @@ import { useState } from 'react';
 import { BellIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import MyTasks from '../components/tasks/MyTasks';
 import TaskCard from '../components/tasks/TaskCard';
-import ModalDetails from '../components/Ui/ModalDetails';
 import { useSelector } from 'react-redux';
+import AddTaskForm from '../components/Ui/AddTaskForm';
 
 const Tasks = () => {
 
   const Tasks = useSelector((state) => state.TaskSlice.task);
-  console.log(Tasks);
 
+
+  const pendingTasks = Tasks.filter((item) => item.status === "pending");
+  const RunningTasks = Tasks.filter((item) => item.status === "running");
+  const DoneTasks = Tasks.filter((item) => item.status === "done");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
 
 
 
@@ -38,12 +40,11 @@ const Tasks = () => {
                 <div className="relative bg-pink-50 rounded-lg shadow-lg p-8 max-w-5xl">
                   <dialog open className="modal">
                     <div className="modal-box">
-                      <ModalDetails closeModal={closeModal} />
+                      <AddTaskForm closeModal={closeModal} />
                     </div>
                   </dialog>
                 </div>
               </div>
-
             )}
             <div className="h-10 w-10 rounded-xl overflow-hidden">
               <img
@@ -59,12 +60,12 @@ const Tasks = () => {
             <div className="flex sticky top-0 justify-between bg-[#D3DDF9] p-5 rounded-md mb-3">
               <h1>Up Next</h1>
               <p className="bg-primary text-white w-6 h-6 grid place-content-center rounded-md">
-                0
+                {pendingTasks.length}
               </p>
             </div>
             <div className="space-y-3">
               {
-                Tasks.map(item => <TaskCard task={item} key={item.id} />)
+                pendingTasks.map(item => <TaskCard task={item} key={item.id} />)
               }
             </div>
           </div>
@@ -72,12 +73,12 @@ const Tasks = () => {
             <div className="flex sticky top-0 justify-between bg-[#D3DDF9] p-5 rounded-md mb-3">
               <h1>In Progress</h1>
               <p className="bg-primary text-white w-6 h-6 grid place-content-center rounded-md">
-                0
+                {RunningTasks.length}
               </p>
             </div>
             <div className="space-y-3">
               {
-                Tasks.map(item => <TaskCard task={item} key={item.id} />)
+                RunningTasks.map(item => <TaskCard task={item} key={item.id} />)
               }
             </div>
           </div>
@@ -85,12 +86,12 @@ const Tasks = () => {
             <div className="flex sticky top-0 justify-between bg-[#D3DDF9] p-5 rounded-md mb-3">
               <h1>Completed</h1>
               <p className="bg-primary text-white w-6 h-6 grid place-content-center rounded-md">
-                0
+                {DoneTasks.length}
               </p>
             </div>
             <div className="space-y-3">
               {
-                Tasks.map(item => <TaskCard task={item} key={item.id} />)
+                DoneTasks.map(item => <TaskCard task={item} key={item.id} />)
               }
             </div>
           </div>
@@ -137,7 +138,10 @@ const Tasks = () => {
             </div>
           </div>
         </div>
+
+
         <MyTasks />
+
       </div>
     </div>
   );

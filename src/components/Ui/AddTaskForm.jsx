@@ -2,14 +2,13 @@ import { useForm } from "react-hook-form"
 import { useDispatch } from "react-redux";
 import { addTask } from "../../redux/features/task/taskSlice";
 
-const ModalDetails = ({ closeModal }) => {
+const AddTaskForm = ({ closeModal }) => {
 
     const { register, handleSubmit } = useForm();
     const dispatch = useDispatch();
 
     const onSubmit = (data) => {
         dispatch(addTask(data));
-        console.log(data);
         closeModal();
     }
 
@@ -30,10 +29,19 @@ const ModalDetails = ({ closeModal }) => {
                     <input type="date"  {...register("date")} placeholder="Type here Your Task Deadline" className="input input-bordered w-full bg-white " />
                 </label>
                 <label className="form-control w-full ">
-                    <div className="label">
-                        <span className="label-text font-medium">Assign To</span>
-                    </div>
-                    <input type="text"  {...register("assignedTo")} placeholder="Type here Who Will Be Assigned" className="input input-bordered w-full bg-white " />
+
+                    <label className="form-control w-full ">
+                        <div className="label">
+                            <span className="label-text font-medium">Assign To</span>
+                        </div>
+                        <select {...register("assignedTo")} className="input input-bordered w-full bg-white">
+                            <option value="">Assign To</option>
+                            <option value="Md. Al Amin Mollik">Md. Al Amin Mollik</option>
+                            <option value="Tahidul Bhai">Tahidul Bhai</option>
+                            <option value="Tiger Mursa Bhai">Tiger Mursa Bhai</option>
+                            <option value="Zaman Bhai">Zaman Bhai</option>
+                        </select>
+                    </label>
                 </label>
                 <label className="form-control w-full ">
                     <div className="label">
@@ -67,4 +75,4 @@ const ModalDetails = ({ closeModal }) => {
     );
 };
 
-export default ModalDetails;
+export default AddTaskForm;

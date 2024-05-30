@@ -4,8 +4,21 @@ import { useDispatch } from 'react-redux';
 
 const TaskCard = ({ task }) => {
 
-
   const dispatch = useDispatch();
+
+  let UpdatedStatus;
+
+  if (task?.status === "pending") {
+    UpdatedStatus = "running";
+  } else if (task?.status === "running") {
+    UpdatedStatus = "done";
+  }else{
+    UpdatedStatus = "Archive"
+  }
+
+
+
+
 
   return (
     <div className="bg-secondary/10 rounded-md p-5">
@@ -25,7 +38,7 @@ const TaskCard = ({ task }) => {
             <TrashIcon className="h-5 w-5 text-red-500" />
           </button>
           <button
-            onClick={() => { dispatch(updateStatus(task.id)) }}
+            onClick={() => { dispatch(updateStatus({ id: task.id, status: UpdatedStatus })) }}
             title="In progress"
           >
             <ArrowRightIcon className="h-5 w-5 text-primary" />
