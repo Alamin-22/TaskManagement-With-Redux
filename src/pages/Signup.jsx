@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import loginImage from '../assets/image/login.svg';
 import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createUser } from '../redux/features/user/userSlice';
 
 const Signup = () => {
@@ -11,6 +11,7 @@ const Signup = () => {
   const confirmPassword = useWatch({ control, name: 'confirmPassword' });
   const navigate = useNavigate();
   const [disabled, setDisabled] = useState(true);
+  const { isLoading, isError, error, email } = useSelector((state) => state.userSlice);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,9 +28,24 @@ const Signup = () => {
     }
   }, [password, confirmPassword]);
 
+
+  useEffect(() => {
+    if (error) {
+      return alert(error)
+    }
+  }, [isError, error])
+
+  useEffect(() => {
+    if (!isLoading && email) {
+      navigate("/")
+    }
+  }, [email, isLoading, navigate])
+
+
   const onSubmit = ({ name, email, password }) => {
     // Email Password signup
     dispatch(createUser({ name, email, password }));
+
     console.log(name, email, password);
   };
 
